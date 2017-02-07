@@ -1,0 +1,32 @@
+<!--
+  Created by IntelliJ IDEA.
+  User: Администратор
+  Date: 07.02.2017
+  Time: 21:44
+  To change this template use File | Settings | File Templates.
+
+
+                                Приветствие
+-->
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" xmlns="http://www.w3.org/1999/xhtml" version="2.0"
+          xmlns:form="http://www.springframework.org/tags/form">
+
+    <html xmlns:jsp="http://java.sun.com/JSP/Page"
+    xmlns:form="http://www.springframework.org/tags/form">
+    <jsp:output omit-xml-declaration="yes"/>
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+
+    <head><title>Fast Food</title></head>
+    <body>
+        <h2>Добро пожаловать в магазин!</h2>
+        <form:form>
+            <input type="text" name="phoneNumber"/><br/>
+            <!--Атрибуты name кнопки submit. Часть _eventId_ в значении атрибута –
+            это подсказка фреймворку Spring Web Flow, что оставшаяся часть значения является именем события, которое должно
+            быть возбуждено. Когда форма отправляется щелчком на этой кнопке, возбуждается событие phoneEntered,
+            заставляющее выполнить переход к состоянию lookupCustomer. -->
+            <input type="submit" name="_eventId_phoneEntered" value="Lookup Customer"/>
+        </form:form>
+    </body>
+    </html>
+</jsp:root>

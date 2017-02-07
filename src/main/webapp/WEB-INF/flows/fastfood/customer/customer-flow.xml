@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.springframework.org/schema/webflow http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd">
+
+    <!--Идентификация клиента -->
+
+    <var name="customer" class="com.fastfood.domain.Customer"/>
+
+    <!-- Вывод приветствия -->
+    <view-state id="welcome">
+        <transition on="phoneEntered" to="lookupCustomer"/>
+    </view-state>
+
+    <!-- Поиск информации о клиенте -->
+    <!--В первом случае объект Customer сохраняется в переменной customer (определяется атрибутом result) и выполняется
+     переход по умолчанию к состоянию customerReady. Но если клиент не найден, метод возбудит исключение CustomerNotFoundException,
+      и последовательность перейдет к состоянию registrationForm -->
+    <action-state id="lookupCustomer">
+        <evaluate  result="customer" expression="fastfoodFlowActions.lookupCustomer(requestParametrs.phoneNumber)" />
+        <transition to="registrationForm" on-exception="com.fastfood.service.CustomerNotFoundException" />
+        <transition to="customerReady" />
+    </action-state>
+
+    <!-- Регистрация нового клиента -->
+    <view-state id="registrationForm" model="customer">
+        <on-entry>
+            <evaluate expression="customer.phoneNumber = requestParametrs.phoneNumber" />
+        </on-entry>
+        <transition on="submit" to="checkDeliveryArea" />
+    </view-state>
+
+    <!-- Проверка зоны обслуживания -->
+    <!-- В этом определении последовательности присутствует элемент <decision-state> . Кроме того, поскольку эта
+    последовательность является подпоследовательностью, вызываемой из основной последовательности, предполагается, что ей
+     будет передаваться объект Order.-->
+    <decision-state id="checkDeliveryArea">
+        <if test="fastfoodFlowActions.checkDeliveryArea(customer.zipCode)" then="addCustomer"
+            else="deliveryWarning"/>
+    </decision-state>
+
+    <!-- Вывод предупреждения -->
+    <view-state id="deliveryWarning">
+        <transition on="accept" to="addCustomer"/>
+    </view-state>
+
+    <!-- Добавление информации о клиенте -->
+    <action-state id="addCustomer">
+        <evaluate expression="fastfoodFlowActions.addCustomer(customer)"/>
+        <transition to="customerReady"/>
+    </action-state>
+
+    <end-state id="cancel"/>
+
+    <!--Конечное состояние customerReady включает элемент <output> . В последовательностях этот элемент играет роль
+    инструкции return. Он возвращает вызывающей последовательности данные из подпоследовательности. В данном случае элемент <output>
+    возвращает переменную customer, которую состояние identifyCustomer в главной последовательности сохраняет в заказе. -->
+    <end-state id="customerReady">
+        <output name="customer"/>
+    </end-state>
+
+    <global-transitions>
+        <transition on="cancel" to="cancel"/>
+    </global-transitions>
+</flow>

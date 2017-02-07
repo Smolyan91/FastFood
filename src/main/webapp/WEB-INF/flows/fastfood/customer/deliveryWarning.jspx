@@ -1,0 +1,21 @@
+<!--
+  Created by IntelliJ IDEA.
+  User: Администратор
+  Date: 07.02.2017
+  Time: 22:18
+  To change this template use File | Settings | File Templates.
+-->
+
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page"  version="2.0">
+    <html xmlns:jsp="http://java.sun.com/JSP/Page">
+    <jsp:output omit-xml-declaration="yes"/>
+    <jsp:directive.page contentType="text/html;charset=UTF-8" />
+    <head><title>Fast Food</title></head>
+    <body>
+        <h2>Доставка невозможна :(( </h2>
+        <p>Ваш адрес находится вне зоны работы наших курьеров. Но вы можете самостоятельно забрать в одном из наших кафе.</p>
+        <![CDATA[<a href="${flowExecutionUrl}&_eventId=accept">Continue, I’ll pick up the order</a> |
+        <a href="${flowExecutionUrl}&_eventId=cancel">Never mind</a>]]>
+    </body>
+    </html>
+</jsp:root>
